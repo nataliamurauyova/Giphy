@@ -52,7 +52,7 @@
                                         </constraints>
                                         <connections>
                                             <outlet property="imageview" destination="cGA-AG-jbP" id="ncq-uV-Wf4"/>
-                                            <segue destination="zNB-69-mmD" kind="show" id="KbL-lP-n4w"/>
+                                            <segue destination="zNB-69-mmD" kind="show" identifier="DetailSeque" id="KbL-lP-n4w"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>

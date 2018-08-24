@@ -13,6 +13,7 @@ class DetailGifViewController: UIViewController {
     @IBOutlet var highResolusionImageView: UIImageView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var pubDateLabel: UILabel!
+    var gif = Gif.init(smallURL: nil, largeURL: nil, title: nil, pubDate: nil, trendingDate: nil)
     
     override func viewDidLoad() {
         super.viewDidLoad()

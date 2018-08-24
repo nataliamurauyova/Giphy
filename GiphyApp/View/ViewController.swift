@@ -13,14 +13,15 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
     
     
     @IBOutlet var collectionView: UICollectionView!
-    var urls = [String]()
+    var urls = String ()
     var titles = [String] ()
     var dates = [String] ()
     var trendingDates = [String] ()
     var urlForSmallGif = [String] ()
     var urlForLargeGif = [String] ()
-//    var gif = Gif.init(smallURL: nil, largeURL: nil, title: nil, pubDate: nil, trendingDate: nil)
-    var gif:Gif
+var gif = Gif.init(smallURL: nil, largeURL: nil, title: nil, pubDate: nil, trendingDate: nil)
+    let colorsArray = [UIColor.blue, UIColor.green, UIColor.purple, UIColor.magenta]
+    //var gif:Gif
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,8 +47,9 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
                     self.urlForSmallGif.append(urlDict["url"] as! String)
                 }
                 for largeURL in originalUrla{
-                    var _ : [String: Any] = largeURL
+                    var largeUrl : [String: Any] = largeURL
                     self.urlForLargeGif.append(largeURL["url"] as! String)
+                    self.urls.append(largeURL["url"] as! String)
                 }
             }
             
@@ -55,7 +57,7 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
 
        self.collectionView.delegate = self
        self.collectionView.dataSource = self
-
+       
     
     }
     
@@ -66,7 +68,8 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! TrendingCollectionViewCell
         self.gif = Gif(smallURL: self.urlForSmallGif[indexPath.row], largeURL: self.urlForLargeGif[indexPath.row], title: self.titles[indexPath.row], pubDate: self.dates[indexPath.row], trendingDate: self.trendingDates[indexPath.row])
-        cell.backgroundColor = UIColor.green
+        //cell.backgroundColor = colorsArray[arc4random_uniform(3)]
+        cell.backgroundColor = UIColor.purple
         let downloader = Downloader()
         downloader.download(fromLink: self.urlForSmallGif[indexPath.row]) { (data) in
             DispatchQueue.main.async {
@@ -81,8 +84,12 @@ class ViewController: UIViewController,UICollectionViewDelegate,UICollectionView
         return cell
     }
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print("Tapped!!!")
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let detailVC = DetailGifViewController()
+        
+        self.navigationController?.pushViewController(detailVC, animated: true)
     }
+    
 
 }
