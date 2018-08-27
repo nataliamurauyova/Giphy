@@ -8,11 +8,58 @@
 
 import Foundation
 
-@objc class GifViewModel: NSObject {
-    let title: String?
+ class GifViewModel {
     
     
-    init(gif: Gif) {
-        self.title = gif.title
+    enum Tags: String {
+        case title = "title"
+        case datetime = "import_datetime"
+    }
+    var title: String? = nil
+    var smallUrlGif = String()
+    var largeUrlGif = String()
+    var date = String ()
+    var resultArray = [Gif]()
+//    init(gif: Gif) {
+//        self.title = gif.title
+//    }
+    
+    func getGifArrayFromJSON(fromURL url: String) -> [Gif]? {
+        let parser = JSON_Parser()
+        
+        let fullJSON: [Any?] = parser.parseJSON(fromURL: url)
+        
+        for dict in fullJSON {
+            var dict : [String:Any] = dict as! [String : Any]
+            
+            let title = dict["title"] as! String
+            
+            let date = dict["import_datetime"] as! String
+            let trendingDate = dict["trending_datetime"] as! String
+            
+            
+            let dataBetweenImagesTag: [[String:Any]] = [dict["images"] as! Dictionary<String, Any>]
+            for image in dataBetweenImagesTag {
+                let dataBetweenPreviewTags: [[String:Any]] = [image["preview_gif"] as! Dictionary<String, Any>]
+                let dataBetweenOriginalTags: [[String:Any]] = [image["original"] as! Dictionary<String, Any>]
+                for smallUrl in dataBetweenPreviewTags {
+                    var urlDict : [String: Any] = smallUrl
+                    self.smallUrlGif = urlDict["url"] as! String
+                }
+                for largeURL in dataBetweenOriginalTags{
+                    var largeDict : [String: Any] = largeURL
+                    self.largeUrlGif = largeDict["url"] as! String
+                }
+            }
+           
+            
+           let gif = Gif(smallURL: self.smallUrlGif, largeURL: self.largeUrlGif, title: title, pubDate: date, trendingDate: trendingDate)
+
+        self.resultArray.append(gif)
+        }
+        
+        
+        return self.resultArray
+        
     }
 }

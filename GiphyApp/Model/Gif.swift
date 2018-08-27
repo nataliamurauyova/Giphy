@@ -8,25 +8,27 @@
 
 import Foundation
 
-//class Gif {
-//    let smallURL: String
-//    let largeURL: String
-//    let title: String
-//    let pubDate: String
-//    let trendingDate: String
-//
-//    init(smallURL: String, largeURL: String, title: String, pubDate: String, trendingDate:String) {
-//        self.smallURL = smallURL
-//        self.largeURL = largeURL
-//        self.title = title
-//        self.pubDate = pubDate
-//        self.trendingDate = trendingDate
+
+class Gif {
+    open static let publicAPIKey = "dc6zaTOxFJmzC"
+    
+        var smallURL: String?
+        var largeURL: String?
+        var title: String?
+        var pubDate: String?
+        var trendingDate: String?
+    
+//    struct Size {
+//        var height: String
+//        var width: String
 //    }
-//}
-struct Gif {
-        let smallURL: String?
-        let largeURL: String?
-        let title: String?
-        let pubDate: String?
-        let trendingDate: String?
+    
+        init(smallURL: String, largeURL: String, title: String, pubDate: String, trendingDate:String) {
+            self.smallURL = smallURL
+            self.largeURL = largeURL
+            self.title = title
+            self.pubDate = pubDate
+            self.trendingDate = trendingDate
+        }
+  
 }

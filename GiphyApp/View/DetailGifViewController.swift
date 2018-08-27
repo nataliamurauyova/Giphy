@@ -13,18 +13,31 @@ class DetailGifViewController: UIViewController {
     @IBOutlet var highResolusionImageView: UIImageView!
     @IBOutlet var titleLabel: UILabel!
     @IBOutlet var pubDateLabel: UILabel!
-    var gif = Gif.init(smallURL: nil, largeURL: nil, title: nil, pubDate: nil, trendingDate: nil)
+    @IBOutlet var logoImageView: UIImageView!
+    var textL = String()
+    var viewModel = GifViewModel()
+    
+    //var gif = Gif.init(smallURL: nil, largeURL: nil, title: nil, pubDate: nil, trendingDate: nil)
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.titleLabel.text = self.viewModel.title
+        self.pubDateLabel.text = self.viewModel.date
+        self.logoImageView.image = UIImage(named: "logo.png")
+        DispatchQueue.global().async {
+            let url = URL(string: self.viewModel.largeUrlGif)
+            let data = try? Data(contentsOf: url!)
+            DispatchQueue.main.async {
+                self.highResolusionImageView.image = UIImage.gif(data: data!)
+            }
+        }
 
        
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    
     
 
 

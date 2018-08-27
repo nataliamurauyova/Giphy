@@ -21,15 +21,6 @@
 @implementation JSON_Parser
 -(NSArray*)parseJSONFromURL:(NSString*)url{
     
-//    if(url){
-//        self.title = [[NSMutableString alloc] init];
-//        self.pubDate = [[NSMutableString alloc] init];
-//        self.trendingDate = [[NSMutableString alloc] init];
-//        self.smallURL = [[NSMutableString alloc] init];
-//        self.largeURL = [[NSMutableString alloc] init];
-//        self.results = [[NSMutableDictionary alloc] init];
-//    
-//    }
     NSData *allContentOfJSON = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:url]];
     NSError *error;
     NSMutableDictionary *allGifsInfo = [NSJSONSerialization JSONObjectWithData:allContentOfJSON
