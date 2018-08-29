@@ -11,5 +11,5 @@
 @interface Downloader : NSObject
 
 -(void)downloadFromLink:(NSString*)url : (void(^)(NSData *data))complition;
-
+- (void)fetchGifWithUrl:(NSString*)strUrl andComplition:(void(^)(NSData*data, NSURL *locationUrl))complition;
 @end

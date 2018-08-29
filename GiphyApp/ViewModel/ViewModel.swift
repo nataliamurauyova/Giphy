@@ -8,7 +8,7 @@
 
 import Foundation
 
- class GifViewModel {
+class GifViewModel:NSObject {
     
     
     enum Tags: String {
@@ -19,7 +19,11 @@ import Foundation
     var smallUrlGif = String()
     var largeUrlGif = String()
     var date = String ()
+    var trendingDate = String ()
+    var height = Int ()
+    var width = Int ()
     var resultArray = [Gif]()
+    
 //    init(gif: Gif) {
 //        self.title = gif.title
 //    }
@@ -41,10 +45,13 @@ import Foundation
             let dataBetweenImagesTag: [[String:Any]] = [dict["images"] as! Dictionary<String, Any>]
             for image in dataBetweenImagesTag {
                 let dataBetweenPreviewTags: [[String:Any]] = [image["preview_gif"] as! Dictionary<String, Any>]
-                let dataBetweenOriginalTags: [[String:Any]] = [image["original"] as! Dictionary<String, Any>]
+                let dataBetweenOriginalTags: [[String:Any]] = [image["downsized"] as! Dictionary<String, Any>]
                 for smallUrl in dataBetweenPreviewTags {
                     var urlDict : [String: Any] = smallUrl
                     self.smallUrlGif = urlDict["url"] as! String
+                    //self.height = urlDict["height"] as! Int
+                    self.height = Int(urlDict["height"] as! String)!
+                    self.width = Int(urlDict["width"] as! String)!
                 }
                 for largeURL in dataBetweenOriginalTags{
                     var largeDict : [String: Any] = largeURL
@@ -52,8 +59,8 @@ import Foundation
                 }
             }
            
-            
-           let gif = Gif(smallURL: self.smallUrlGif, largeURL: self.largeUrlGif, title: title, pubDate: date, trendingDate: trendingDate)
+            var sizes = Gif.Size(height: self.height, width: self.width)
+           let gif = Gif(smallURL: self.smallUrlGif, largeURL: self.largeUrlGif, title: title, pubDate: date, trendingDate: trendingDate, size:sizes )
 
         self.resultArray.append(gif)
         }
@@ -62,4 +69,5 @@ import Foundation
         return self.resultArray
         
     }
+    
 }

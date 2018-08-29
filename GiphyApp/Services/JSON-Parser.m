@@ -30,26 +30,7 @@
         NSLog(@"Error with JSON-parsing - %@",[error localizedDescription]);
     } else {
         NSArray *dataFromJSONDataTag = allGifsInfo[@"data"];
-        //NSLog(@"dataFromJSONDataTag - %@",dataFromJSONDataTag);
         return dataFromJSONDataTag;
-//        for (NSDictionary *partOfJSON in dataFromJSONDataTag) {
-//            self.title = partOfJSON[@"title"];
-//            self.pubDate = partOfJSON[@"import_datetime"];
-//            self.trendingDate = partOfJSON[@"trending_datetime"];
-//            NSMutableDictionary *dataFromJSONImagesTag = [NSMutableDictionary dictionaryWithDictionary:partOfJSON[@"images"]];
-//            NSMutableDictionary *dataFromJSONPreviewTag = [NSMutableDictionary dictionaryWithDictionary:dataFromJSONImagesTag[@"preview"]];
-//            NSMutableDictionary *dataFromJSONOriginalTag = [NSMutableDictionary dictionaryWithDictionary:dataFromJSONImagesTag[@"original"]];
-//            self.smallURL = dataFromJSONPreviewTag[@"mp4"];
-//            self.largeURL = dataFromJSONOriginalTag[@"mp4"];
-//
-//            [self.results setObject:self.title forKey:@"title"];
-//            [self.results setObject:self.pubDate forKey:@"pubDate"];
-//            [self.results setObject:self.trendingDate forKey:@"trendingDate"];
-//            [self.results setObject:self.smallURL forKey:@"smallURL"];
-//            [self.results setObject:self.largeURL forKey:@"largeURL"];
-//            //NSLog(@"INSIDE THE LOOP - %@",self.results);
-//            return self.results;
-//        }
     }
     
     return nil;

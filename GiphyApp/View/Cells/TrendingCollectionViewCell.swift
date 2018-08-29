@@ -11,4 +11,5 @@ import UIKit
 class TrendingCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet var imageview: UIImageView!
+    
 }

@@ -11,5 +11,8 @@
 
 #import "JSON-Parser.h"
 #import "Downloader.h"
+#import "GiphyFileManager.h"
+
+
 
 #endif /* BridgingHeader_h */

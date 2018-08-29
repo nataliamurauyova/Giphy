@@ -17,18 +17,21 @@ class Gif {
         var title: String?
         var pubDate: String?
         var trendingDate: String?
+        var sizes: Size
     
-//    struct Size {
-//        var height: String
-//        var width: String
-//    }
     
-        init(smallURL: String, largeURL: String, title: String, pubDate: String, trendingDate:String) {
+    struct Size {
+        var height: Int
+        var width: Int
+    }
+    
+    init(smallURL: String, largeURL: String, title: String, pubDate: String, trendingDate:String, size: Size) {
             self.smallURL = smallURL
             self.largeURL = largeURL
             self.title = title
             self.pubDate = pubDate
             self.trendingDate = trendingDate
+            self.sizes = size
         }
   
 }
