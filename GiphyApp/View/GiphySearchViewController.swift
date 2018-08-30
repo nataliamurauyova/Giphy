@@ -10,58 +10,71 @@ import UIKit
 
 class GiphySearchViewController: UIViewController,UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     var navTitle = String()
+    var searchQuery = String()
+    
+    var offset = 0
     var viewModel = GifViewModel()
     var dataSource = [Gif]()
-    //var collectionView = UICollectionView()
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        let myView = UIView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
-//        myView.backgroundColor = UIColor.green
-//        self.view.addSubview(myView)
-                let layout = UICollectionViewFlowLayout()
-                let insetLeft: CGFloat = 5.0
-                let insetRight: CGFloat = 5.0
-                layout.sectionInset = UIEdgeInsets(top: 10, left: insetLeft, bottom: 5, right: insetRight)
-                layout.minimumLineSpacing = 5.0
-                layout.minimumInteritemSpacing = 10.0
-        let collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
-        collectionView.backgroundColor = UIColor.black
-        collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
-        self.view.addSubview(collectionView)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-       self.navigationItem.title = self.navTitle
-        let query: String = self.navTitle.lowercased()
-        self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: "http://api.giphy.com/v1/gifs/search?q=\(query)&api_key=dc6zaTOxFJmzC")!
-        print(self.dataSource[0].title)
+        self.setCollectionView()
+        self.navigationItem.title = self.navTitle
+        var query: String = self.navTitle.lowercased()
+        query = self.checkSpacesInQuery(query: query)
+        self.searchQuery = query
         
-        //self.setUpCollectionView()
+
+        self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: "http://api.giphy.com/v1/gifs/search?q=\(query)&api_key=dc6zaTOxFJmzC")!
+        self.addAlertControllerIfNeeded()
+ 
         
     }
+    //MARK: UICollectionViewDelegate methods
+    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.dataSource.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
+
+        self.loadGifsWithoffset(indexPath, on: collectionView)
         cell.backgroundColor = UIColor.purple
                 let downloader = Downloader()
+        downloader.fetchGif(withUrlAndError: self.dataSource[indexPath.row].smallURL) { (data, destinationURL, error) in
+
+                                    DispatchQueue.main.async {
+                                        //let dataA = try? Data(contentsOf: destination!)
+                                        let image = UIImage.gif(url: (destinationURL?.absoluteString)!)
+                                        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
+                                        imageView.image = image
+                                        cell.addSubview(imageView)
+                                    }
+        }
         
-                downloader.download(fromLink: self.dataSource[indexPath.row].smallURL) { (data) in
-                    DispatchQueue.main.async {
-                        let image = UIImage.gif(data: data!)
-                        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
-                        imageView.image = image
-                        cell.addSubview(imageView)
-                    }
-                }
+//                downloader.download(fromLink: self.dataSource[indexPath.row].smallURL) { (data) in
+//                    DispatchQueue.main.async {
+//                        let image = UIImage.gif(data: data!)
+//                        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
+//                        imageView.image = image
+//                        cell.addSubview(imageView)
+//                    }
+//                }
+        
         return cell
     }
+     //MARK: UICollectionViewDelegateFlowLayout methods
         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
-            let width = self.dataSource[indexPath.row].sizes.width
-            let height = self.dataSource[indexPath.row].sizes.height
-            return CGSize(width: (width/2) - 10 , height: height)
+            let width = Int((self.view.frame.size.width/2) - 15)
+            var height = self.dataSource[indexPath.row].sizes.height
+            if (height > 200){
+                height = 170
+            }
+            
+            return CGSize(width: width  , height: height)
         }
     
         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -77,34 +90,52 @@ class GiphySearchViewController: UIViewController,UICollectionViewDelegate, UICo
         
         
         self.navigationController?.pushViewController(destVC, animated: true)
-
-//        print(self.dataSource[indexPath.row].title)
-//        destinationVC.viewModel.title = self.dataSource[(indexPath.row)].title!
-//        destinationVC.viewModel.largeUrlGif = self.dataSource[(indexPath.row)].largeURL!
-//        destinationVC.viewModel.date = self.dataSource[(indexPath.row)].pubDate!
-//        self.navigationController?.pushViewController(destinationVC, animated: true)
-        
     }
-//    let layout: UICollectionViewFlowLayout = {
-//        let layout = UICollectionViewFlowLayout()
-//        let insetLeft: CGFloat = 5.0
-//        let insetRight: CGFloat = 5.0
-//        layout.sectionInset = UIEdgeInsets(top: 10, left: insetLeft, bottom: 5, right: insetRight)
-//        layout.minimumLineSpacing = 5.0
-//        layout.minimumInteritemSpacing = 10.0
-//        //        layout.itemSize = CGSize(width: UIScreen.main.bounds.size.width / 2 - (insetLeft + insetRight), height: 140)
-//        return layout
-//    }()
-//    func setUpCollectionView()  {
-//        collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
-//        collectionView.backgroundColor = .black
-////        collectionView.delegate = self
-////        collectionView.dataSource = self
-//        collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: "cellID")
-//        self.view.addSubview(collectionView)
-//    }
+    
+    func setCollectionView()  {
+        let layout = UICollectionViewFlowLayout()
+        let insetLeft: CGFloat = 5.0
+        let insetRight: CGFloat = 5.0
+        layout.sectionInset = UIEdgeInsets(top: 10, left: insetLeft, bottom: 5, right: insetRight)
+        layout.minimumLineSpacing = 5.0
+        layout.minimumInteritemSpacing = 10.0
+        
+        let collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
+        collectionView.backgroundColor = UIColor.black
+        collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        view.addSubview(collectionView)
+        collectionView.delegate = self
+        collectionView.dataSource = self
+    }
+    func loadGifsWithoffset(_ indexPath: IndexPath, on collectionView: UICollectionView) {
+        let count = self.dataSource.count - 2
+        if (indexPath.row == count){
+            self.offset += 25
+            let url: String = "http://api.giphy.com/v1/gifs/search?q=\(self.searchQuery)&api_key=dc6zaTOxFJmzC&offset=\(self.offset))"
+            self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: url)!
+            var indexes = [IndexPath]()
+            for idx in (self.dataSource.count)-25..<(self.dataSource.count) {
+                indexes.append(IndexPath(item: idx, section: 0))
+            }
+            collectionView.insertItems(at: indexes)
+        }
+    }
+    func addAlertControllerIfNeeded()  {
+        if (self.dataSource.count == 0) {
+            let alert = UIAlertController(title: "Sorry, we can't find gifs that fit your query:(", message: "Check it, please.", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Got it", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+            self.navigationItem.title = ""
+            
+        }
+    }
 
-
-   
+        func checkSpacesInQuery(query:String) -> String {
+            var query = query
+            if (query.contains(" ")){
+                query = query.replacingOccurrences(of: " ", with: "+")
+            }
+            return query
+        }
 
 }

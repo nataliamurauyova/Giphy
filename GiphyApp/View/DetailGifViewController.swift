@@ -19,7 +19,7 @@ class DetailGifViewController: UIViewController {
     
     
     @IBAction func shareButtonClicked(_ sender: Any) {
-        let activityVC = UIActivityViewController(activityItems: ["www.google.com"], applicationActivities: nil)
+        let activityVC = UIActivityViewController(activityItems: [self.viewModel.largeUrlGif], applicationActivities: nil)
         activityVC.popoverPresentationController?.sourceView = self.view
         self.present(activityVC, animated: true, completion: nil)
     }
@@ -33,7 +33,7 @@ class DetailGifViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        
+        self.trendButton.isHidden = true
         let dateForLabel = String.convertDateFrom(date: self.viewModel.date)
 
         self.pubDateLabel.text = dateForLabel
@@ -45,6 +45,7 @@ class DetailGifViewController: UIViewController {
             let url = URL(string: self.viewModel.largeUrlGif)
             let data = try? Data(contentsOf: url!)
             DispatchQueue.main.async {
+                self.trendButton.isHidden = false
                 self.highResolusionImageView.image = UIImage.gif(data: data!)
             }
         }

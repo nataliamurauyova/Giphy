@@ -24,6 +24,7 @@ class Gif {
         var height: Int
         var width: Int
     }
+
     
     init(smallURL: String, largeURL: String, title: String, pubDate: String, trendingDate:String, size: Size) {
             self.smallURL = smallURL

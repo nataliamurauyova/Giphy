@@ -44,14 +44,14 @@ class GifViewModel:NSObject {
             
             let dataBetweenImagesTag: [[String:Any]] = [dict["images"] as! Dictionary<String, Any>]
             for image in dataBetweenImagesTag {
-                let dataBetweenPreviewTags: [[String:Any]] = [image["preview_gif"] as! Dictionary<String, Any>]
+                guard let dataBetweenPreviewTags: [[String:Any]]? = [image["preview_gif"] as! Dictionary<String, Any>] else { return nil}
                 let dataBetweenOriginalTags: [[String:Any]] = [image["downsized"] as! Dictionary<String, Any>]
-                for smallUrl in dataBetweenPreviewTags {
-                    var urlDict : [String: Any] = smallUrl
-                    self.smallUrlGif = urlDict["url"] as! String
+                for smallUrl in dataBetweenPreviewTags! {
+                    guard var urlDict : [String: Any]? = smallUrl else {return nil }
+                    self.smallUrlGif = urlDict!["url"] as! String
                     //self.height = urlDict["height"] as! Int
-                    self.height = Int(urlDict["height"] as! String)!
-                    self.width = Int(urlDict["width"] as! String)!
+                    self.height = Int(urlDict!["height"] as! String)!
+                    self.width = Int(urlDict!["width"] as! String)!
                 }
                 for largeURL in dataBetweenOriginalTags{
                     var largeDict : [String: Any] = largeURL

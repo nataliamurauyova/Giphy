@@ -18,6 +18,7 @@ class ViewController: UIViewController, UICollectionViewDelegate,UICollectionVie
   
     let viewModel = GifViewModel()
     var dataSource = [Gif]()
+    var offset = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,10 +31,10 @@ class ViewController: UIViewController, UICollectionViewDelegate,UICollectionVie
        self.navigationController?.navigationBar.barTintColor = UIColor.gray
     
         
-            for i in stride(from: 0, to: 500, by: 25) {
-                self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: "http://api.giphy.com/v1/gifs/trending?api_key=dc6zaTOxFJmzC&offset=\(i-1)")!
-            }
-       
+//            for i in stride(from: 0, to: 500, by: 25) {
+                self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: "http://api.giphy.com/v1/gifs/trending?api_key=dc6zaTOxFJmzC&offset=0")!
+//            }
+       //self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: "http://api.giphy.com/v1/gifs/trending?api_key=dc6zaTOxFJmzC)")!
 
         
     }
@@ -57,28 +58,29 @@ class ViewController: UIViewController, UICollectionViewDelegate,UICollectionVie
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! TrendingCollectionViewCell
     
         cell.backgroundColor = UIColor.purple
+        self.loadGifsWithoffset(indexPath)
         
         let downloader = Downloader()
-        downloader.fetchGif(withUrl: self.dataSource[indexPath.row].smallURL) { (data, destination) in
-
-                        DispatchQueue.main.async {
-                            //let dataA = try? Data(contentsOf: destination!)
-                            let image = UIImage.gif(url: (destination?.absoluteString)!)
-                            let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
-                            imageView.image = image
-                            cell.addSubview(imageView)
-                        }
-        }
+//        downloader.fetchGif(withUrl: self.dataSource[indexPath.row].smallURL) { (data, destination) in
 //
-//
-//        downloader.download(fromLink: self.dataSource[indexPath.row].smallURL) { (data) in
-//            DispatchQueue.main.async {
-//                let image = UIImage.gif(data: data!)
-//                let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
-//                imageView.image = image
-//                cell.addSubview(imageView)
-//            }
+//                        DispatchQueue.main.async {
+//                            //let dataA = try? Data(contentsOf: destination!)
+//                            let image = UIImage.gif(url: (destination?.absoluteString)!)
+//                            let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
+//                            imageView.image = image
+//                            cell.addSubview(imageView)
+//                        }
 //        }
+
+
+        downloader.download(fromLink: self.dataSource[indexPath.row].smallURL) { (data) in
+            DispatchQueue.main.async {
+                let image = UIImage.gif(data: data!)
+                let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
+                imageView.image = image
+                cell.addSubview(imageView)
+            }
+        }
 //        let fm = GiphyFileManager()
 //        fm.loadURL(self.dataSource[indexPath.row].smallURL) { (destination) in
 //            DispatchQueue.main.async{
@@ -105,6 +107,19 @@ class ViewController: UIViewController, UICollectionViewDelegate,UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 10.0
+    }
+    func loadGifsWithoffset(_ indexPath: IndexPath) {
+        let count = self.dataSource.count - 2
+        if (indexPath.row == count){
+            self.offset += 25
+            let url: String = "http://api.giphy.com/v1/gifs/trending?api_key=dc6zaTOxFJmzC&offset=\(self.offset))"
+            self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: url)!
+            var indexes = [IndexPath]()
+            for idx in (self.dataSource.count)-25..<(self.dataSource.count) {
+                indexes.append(IndexPath(item: idx, section: 0))
+            }
+            self.collectionView.insertItems(at: indexes)
+        }
     }
     
     //MARK: Prepare for segue method

@@ -19,17 +19,15 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo" translatesAutoresizingMaskIntoConstraints="NO" id="H9B-Da-Ngl">
-                                <rect key="frame" x="0.0" y="269" width="375" height="128"/>
+                                <rect key="frame" x="0.0" y="269" width="375" height="150"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="H9B-Da-Ngl" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="YLB-5q-WrE"/>
-                            <constraint firstItem="H9B-Da-Ngl" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="faz-XH-BOE"/>
-                            <constraint firstItem="H9B-Da-Ngl" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="leQ-o4-xWx"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="H9B-Da-Ngl" secondAttribute="bottom" constant="270" id="nIU-pq-tNp"/>
-                            <constraint firstItem="H9B-Da-Ngl" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="249" id="rah-om-div"/>
-                            <constraint firstItem="H9B-Da-Ngl" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="vmN-Vo-CLR"/>
+                            <constraint firstItem="H9B-Da-Ngl" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="9ar-oh-1Sy"/>
+                            <constraint firstItem="H9B-Da-Ngl" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="IEg-Ap-sCo"/>
+                            <constraint firstItem="H9B-Da-Ngl" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="T5h-Kc-fVH"/>
+                            <constraint firstItem="H9B-Da-Ngl" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="lzC-YN-2jw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
