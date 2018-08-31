@@ -10,12 +10,11 @@ import Foundation
 
 class GifViewModel:NSObject {
     
+    open static let publicAPIKey = "dc6zaTOxFJmzC"
+    let trendingURL = "http://api.giphy.com/v1/gifs/trending?api_key=dc6zaTOxFJmzC&offset=0"
     
-    enum Tags: String {
-        case title = "title"
-        case datetime = "import_datetime"
-    }
-    var title: String? = nil
+   
+    var title = String()
     var smallUrlGif = String()
     var largeUrlGif = String()
     var date = String ()
@@ -23,51 +22,98 @@ class GifViewModel:NSObject {
     var height = Int ()
     var width = Int ()
     var resultArray = [Gif]()
+    var gifArray = [Gif]()
+    var location = String()
+    var numberOfRows = Int()
+    var rating = String()
+    
     
 //    init(gif: Gif) {
-//        self.title = gif.title
+//        self.title = gif.title!
 //    }
     
     func getGifArrayFromJSON(fromURL url: String) -> [Gif]? {
         let parser = JSON_Parser()
+        
         
         let fullJSON: [Any?] = parser.parseJSON(fromURL: url)
         
         for dict in fullJSON {
             var dict : [String:Any] = dict as! [String : Any]
             
-            let title = dict["title"] as! String
+            let title = dict[Constants.kTitleTag] as! String
             
-            let date = dict["import_datetime"] as! String
-            let trendingDate = dict["trending_datetime"] as! String
+            let date = dict[Constants.kPubDate] as! String
+            let trendingDate = dict[Constants.kTrendDate] as! String
+            let rating = dict[Constants.kRatingTag] as! String
             
             
-            let dataBetweenImagesTag: [[String:Any]] = [dict["images"] as! Dictionary<String, Any>]
+            let dataBetweenImagesTag: [[String:Any]] = [dict[Constants.kImagesTag] as! Dictionary<String, Any>]
             for image in dataBetweenImagesTag {
-                guard let dataBetweenPreviewTags: [[String:Any]]? = [image["preview_gif"] as! Dictionary<String, Any>] else { return nil}
-                let dataBetweenOriginalTags: [[String:Any]] = [image["downsized"] as! Dictionary<String, Any>]
+                guard let dataBetweenPreviewTags: [[String:Any]]? = [image[Constants.kPreviewTag] as! Dictionary<String, Any>] else { return nil}
+                let dataBetweenOriginalTags: [[String:Any]] = [image[Constants.kDownsizedTag] as! Dictionary<String, Any>]
                 for smallUrl in dataBetweenPreviewTags! {
                     guard var urlDict : [String: Any]? = smallUrl else {return nil }
-                    self.smallUrlGif = urlDict!["url"] as! String
-                    //self.height = urlDict["height"] as! Int
-                    self.height = Int(urlDict!["height"] as! String)!
-                    self.width = Int(urlDict!["width"] as! String)!
+                    self.smallUrlGif = urlDict![Constants.kUrlTag] as! String
+                    
+                    self.height = Int(urlDict![Constants.kHeightTag] as! String)!
+                    self.width = Int(urlDict![Constants.kWidthtag] as! String)!
                 }
                 for largeURL in dataBetweenOriginalTags{
                     var largeDict : [String: Any] = largeURL
-                    self.largeUrlGif = largeDict["url"] as! String
+                    self.largeUrlGif = largeDict[Constants.kUrlTag] as! String
                 }
             }
            
-            var sizes = Gif.Size(height: self.height, width: self.width)
-           let gif = Gif(smallURL: self.smallUrlGif, largeURL: self.largeUrlGif, title: title, pubDate: date, trendingDate: trendingDate, size:sizes )
+            let sizes = Gif.Size(height: self.height, width: self.width)
+            let urls = Gif.Urls(smallURL: self.smallUrlGif, largeURL: self.largeUrlGif, locationURL: nil)
+            let dates = Gif.Dates(importing: date, trending: trendingDate)
+            //let gif = Gif(urls: urls, title: title, dates: dates, size: sizes)
+            let gif = Gif(urls: urls, title: title, rating: rating, dates: dates, size: sizes)
+            
 
         self.resultArray.append(gif)
         }
-        
-        
         return self.resultArray
+    }
+    
+//    func filterFetchedArray(gifArray: [Gif]) {
+//        var resultGifArray = gifArray
+//        for  gif in resultGifArray {
+//            if (gif.rating != "y" ) {
+//                resultGifArray.remove(at: resultGifArray.index{$0 == gif})
+//                
+//            }
+//        }
+//    }
+    
+    func getNumberOfRowsForTrends() -> Int {
+        self.gifArray = self.getGifArrayFromJSON(fromURL: trendingURL)!
+        self.numberOfRows = self.gifArray.count
+     
+        return self.gifArray.count
+    }
+    
+    func fetchDataForTrendingCell(_ indexPath: IndexPath, completion: ((String) -> Void)?) -> Void {
+        self.gifArray = self.getGifArrayFromJSON(fromURL: trendingURL)!
+        //self.numberOfRows = self.gifArray.count
         
+        let downloader = Downloader()
+
+        downloader.fetchGif(withUrl: self.gifArray[indexPath.row].urls.smallURL) { (data, destinationURL) in
+            let str: String = (destinationURL?.absoluteString)!
+            self.location = str
+            //self.gifArray[indexPath.row].urls.locationURL = destinationURL
+            completion!(str)
+        }
+    }
+    func fetchGifsForTrends(url: String, completion: @escaping ((Data, URL) -> Void))  {
+        let downloader = Downloader()
+        downloader.fetchGif(withUrl: url) { (data, destinationURL) in
+            let compData = data
+            let desturl = destinationURL
+            completion(compData!, desturl!)
+        }
     }
     
 }

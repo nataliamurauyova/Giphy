@@ -7,13 +7,10 @@
 //
 
 #import "JSON-Parser.h"
-@interface JSON_Parser()
-@property(nonatomic) NSMutableString* title;
-@property(nonatomic) NSMutableString* smallURL;
-@property(nonatomic) NSMutableString *largeURL;
-@property(nonatomic) NSMutableString *pubDate;
-@property(nonatomic) NSMutableString *trendingDate;
 
+static NSString* const kDataTag = @"data";
+
+@interface JSON_Parser()
 
 @end
 
@@ -29,7 +26,7 @@
     if(error){
         NSLog(@"Error with JSON-parsing - %@",[error localizedDescription]);
     } else {
-        NSArray *dataFromJSONDataTag = allGifsInfo[@"data"];
+        NSArray *dataFromJSONDataTag = allGifsInfo[kDataTag];
         return dataFromJSONDataTag;
     }
     

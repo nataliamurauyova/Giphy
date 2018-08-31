@@ -12,10 +12,10 @@ import Foundation
 extension String{
     static func convertDateFrom(date: String) -> String?{
                 let dateFormatterGet = DateFormatter()
-                dateFormatterGet.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                dateFormatterGet.dateFormat = "\(dateFormats.oldFormat)"
         
                 let dateFormatterPrint = DateFormatter()
-                dateFormatterPrint.dateFormat = "MMM dd,yyyy"
+                dateFormatterPrint.dateFormat = "\(dateFormats.newFormat)"
         
         if let getDate = dateFormatterGet.date(from: date){
             let dateForLabel = dateFormatterPrint.string(from: getDate)

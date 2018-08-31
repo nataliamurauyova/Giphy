@@ -19,7 +19,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="03j-ag-WTc">
-                                <rect key="frame" x="0.0" y="120" width="375" height="547"/>
+                                <rect key="frame" x="0.0" y="120" width="375" height="503"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="wgf-mL-3WG">
                                     <size key="itemSize" width="50" height="50"/>
@@ -75,7 +75,15 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Trending GIFs" id="LRU-EU-POG"/>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Trending GIFs" id="LRU-EU-POG">
+                        <barButtonItem key="leftBarButtonItem" title="🔞" id="wNL-7i-beP">
+                            <connections>
+                                <action selector="filterButtonClicked:" destination="BYZ-38-t0r" id="79m-Z4-ql6"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="collectionView" destination="03j-ag-WTc" id="Krb-FM-Hdf"/>
                         <outlet property="searchBar" destination="Kp2-BX-2Fq" id="pl6-4h-27U"/>
@@ -89,18 +97,18 @@
         <scene sceneID="xDH-i5-4nF">
             <objects>
                 <viewController id="zNB-69-mmD" customClass="DetailGifViewController" customModule="GiphyApp" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="XKt-GF-Ayv">
+                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="XKt-GF-Ayv">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="x5n-bI-1ms">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="x5n-bI-1ms">
                                 <rect key="frame" x="0.0" y="64" width="375" height="330"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="375" id="PSt-aI-INc"/>
                                     <constraint firstAttribute="height" constant="330" id="mZ6-hq-3qQ"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Td0-X2-amX">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Td0-X2-amX">
                                 <rect key="frame" x="0.0" y="411" width="375" height="51"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="51" id="XLo-Sy-huG"/>
@@ -109,7 +117,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PMA-YO-xH1">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PMA-YO-xH1">
                                 <rect key="frame" x="0.0" y="478" width="375" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="9vv-rd-msc"/>
@@ -118,7 +126,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cYK-rN-txq">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cYK-rN-txq">
                                 <rect key="frame" x="0.0" y="366" width="36" height="28"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="36" id="LLr-Yk-0iA"/>
@@ -126,13 +134,13 @@
                                 </constraints>
                                 <state key="normal" image="trend"/>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="800" translatesAutoresizingMaskIntoConstraints="NO" id="2bR-Cq-Bf8">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="800" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2bR-Cq-Bf8">
                                 <rect key="frame" x="0.0" y="584" width="375" height="83"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="83" id="tHK-ju-xqd"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XKz-75-dKk">
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XKz-75-dKk">
                                 <rect key="frame" x="161" y="523" width="53" height="26"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="26" id="TQG-4Q-YSz"/>

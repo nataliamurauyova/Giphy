@@ -19,7 +19,9 @@ class DetailGifViewController: UIViewController {
     
     
     @IBAction func shareButtonClicked(_ sender: Any) {
-        let activityVC = UIActivityViewController(activityItems: [self.viewModel.largeUrlGif], applicationActivities: nil)
+        
+        let data = try! Data(contentsOf: URL(string: self.viewModel.largeUrlGif)!)
+        let activityVC = UIActivityViewController(activityItems: [data], applicationActivities: nil)
         activityVC.popoverPresentationController?.sourceView = self.view
         self.present(activityVC, animated: true, completion: nil)
     }
@@ -34,13 +36,17 @@ class DetailGifViewController: UIViewController {
         super.viewDidLoad()
 
         self.trendButton.isHidden = true
+        self.setUpViews()
+        self.setUpMainGif()
+    }
+
+     func setUpViews(){
         let dateForLabel = String.convertDateFrom(date: self.viewModel.date)
-
         self.pubDateLabel.text = dateForLabel
-        self.titleLabel.text = self.viewModel.title!
+        self.titleLabel.text = self.viewModel.title
         self.logoImageView.image = UIImage(named: "logo.png")
-        
-
+    }
+    func setUpMainGif() {
         DispatchQueue.global().async {
             let url = URL(string: self.viewModel.largeUrlGif)
             let data = try? Data(contentsOf: url!)
@@ -50,11 +56,7 @@ class DetailGifViewController: UIViewController {
             }
         }
 
-       
     }
-
-    
-    
 
 
 

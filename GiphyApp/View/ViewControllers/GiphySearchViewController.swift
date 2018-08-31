@@ -27,43 +27,23 @@ class GiphySearchViewController: UIViewController,UICollectionViewDelegate, UICo
         self.searchQuery = query
         
 
-        self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: "http://api.giphy.com/v1/gifs/search?q=\(query)&api_key=dc6zaTOxFJmzC")!
+        self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: "\(constantUrls.kSearchUrl)\(query)&api_key=\(constantUrls.apiKey)&rating=\(self.viewModel.rating)")!
         self.addAlertControllerIfNeeded()
  
         
     }
-    //MARK: UICollectionViewDelegate methods
     
-
+    //MARK: UICollectionViewDelegate methods
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.dataSource.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! SearchCollectionViewCell
 
         self.loadGifsWithoffset(indexPath, on: collectionView)
         cell.backgroundColor = UIColor.purple
-                let downloader = Downloader()
-        downloader.fetchGif(withUrlAndError: self.dataSource[indexPath.row].smallURL) { (data, destinationURL, error) in
+        self.showGif(indexPath: indexPath, cell: cell)
 
-                                    DispatchQueue.main.async {
-                                        //let dataA = try? Data(contentsOf: destination!)
-                                        let image = UIImage.gif(url: (destinationURL?.absoluteString)!)
-                                        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
-                                        imageView.image = image
-                                        cell.addSubview(imageView)
-                                    }
-        }
-        
-//                downloader.download(fromLink: self.dataSource[indexPath.row].smallURL) { (data) in
-//                    DispatchQueue.main.async {
-//                        let image = UIImage.gif(data: data!)
-//                        let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
-//                        imageView.image = image
-//                        cell.addSubview(imageView)
-//                    }
-//                }
-        
         return cell
     }
      //MARK: UICollectionViewDelegateFlowLayout methods
@@ -82,12 +62,11 @@ class GiphySearchViewController: UIViewController,UICollectionViewDelegate, UICo
         }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
-        let destVC = SearchDetailViewController(nibName: "SearchDetailViewController", bundle: nil)
+                let destVC = SearchDetailViewController(nibName: "SearchDetailViewController", bundle: nil)
                 destVC.viewModel.title = self.dataSource[(indexPath.row)].title!
-                destVC.viewModel.largeUrlGif = self.dataSource[(indexPath.row)].largeURL!
-                destVC.viewModel.date = self.dataSource[(indexPath.row)].pubDate!
-                destVC.viewModel.trendingDate = self.dataSource[indexPath.row].trendingDate!
-        
+                destVC.viewModel.largeUrlGif = self.dataSource[(indexPath.row)].urls.largeURL!
+                destVC.viewModel.date = self.dataSource[(indexPath.row)].dates.importing!
+                destVC.viewModel.trendingDate = self.dataSource[indexPath.row].dates.trending!
         
         self.navigationController?.pushViewController(destVC, animated: true)
     }
@@ -102,7 +81,7 @@ class GiphySearchViewController: UIViewController,UICollectionViewDelegate, UICo
         
         let collectionView = UICollectionView(frame: self.view.frame, collectionViewLayout: layout)
         collectionView.backgroundColor = UIColor.black
-        collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: "Cell")
+        collectionView.register(SearchCollectionViewCell.self, forCellWithReuseIdentifier: cellConstant.kReuseIdentifier )
         view.addSubview(collectionView)
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -111,7 +90,7 @@ class GiphySearchViewController: UIViewController,UICollectionViewDelegate, UICo
         let count = self.dataSource.count - 2
         if (indexPath.row == count){
             self.offset += 25
-            let url: String = "http://api.giphy.com/v1/gifs/search?q=\(self.searchQuery)&api_key=dc6zaTOxFJmzC&offset=\(self.offset))"
+            let url: String = "\(constantUrls.kSearchUrl)\(self.searchQuery)&api_key=\(constantUrls.apiKey)&offset=\(self.offset)rating=\(self.viewModel.rating))"
             self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: url)!
             var indexes = [IndexPath]()
             for idx in (self.dataSource.count)-25..<(self.dataSource.count) {
@@ -137,5 +116,28 @@ class GiphySearchViewController: UIViewController,UICollectionViewDelegate, UICo
             }
             return query
         }
+    func showGif(indexPath: IndexPath, cell: UICollectionViewCell)  {
+        if  let locationUrl = self.dataSource[indexPath.row].urls.locationURL{
+            guard let location = URL(string: locationUrl) else{ return }
+            let data = try? Data(contentsOf: location)
+            
+            let image = UIImage.gif(data: data!)
+            
+            let myImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
+            myImageView.image = image
+            cell.addSubview(myImageView)
+            
+        } else{
+            self.viewModel.fetchGifsForTrends(url: self.dataSource[indexPath.row].urls.smallURL!) { (data, destinationURL) in
+                DispatchQueue.main.async {[weak self] in
+                    self?.dataSource[indexPath.row].urls.locationURL = destinationURL.absoluteString
+                    let image = UIImage.gif(data: data)
+                    let myImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
+                    myImageView.image = image
+                    cell.addSubview(myImageView)
+                }
+            }
+        }
+    }
 
 }

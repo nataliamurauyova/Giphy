@@ -10,5 +10,23 @@ import UIKit
 
 class SearchCollectionViewCell: UICollectionViewCell {
     
-   //var imageView: UIImageView!
+    var myImageView: UIImageView = {
+        let imageV = UIImageView(frame: CGRect.zero)
+        return imageV
+    }()
+    
+    override init(frame: CGRect) {
+        //self.myImageView = UIImageView(frame: CGRect.zero)
+        super.init(frame: frame)
+        //self.myImageView = UIImageView(frame: CGRect.zero)
+        self.addSubview(myImageView)
+    }
+    
+    func addMySub()  {
+        self.addSubview(self.myImageView)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

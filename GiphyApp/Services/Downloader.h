@@ -10,7 +10,7 @@
 
 @interface Downloader : NSObject
 
--(void)downloadFromLink:(NSString*)url : (void(^)(NSData *data))complition;
+-(BOOL)downloadFromLink:(NSString*)url : (void(^)(NSData *data))complition;
 - (void)fetchGifWithUrl:(NSString*)strUrl andComplition:(void(^)(NSData*data, NSURL *locationUrl))complition;
 - (void)fetchGifWithUrlAndError:(NSString*)strUrl andComplition:(void(^)(NSData*data, NSURL *locationUrl, NSError *error ))complition;
 @end
