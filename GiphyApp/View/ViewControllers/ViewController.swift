@@ -62,6 +62,8 @@ class ViewController: UIViewController, UICollectionViewDelegate,UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellConstant.kReuseIdentifier, for: indexPath) as! TrendingCollectionViewCell
+        
+        
     
         cell.backgroundColor = UIColor.purple
         self.loadGifsWithoffset(indexPath)

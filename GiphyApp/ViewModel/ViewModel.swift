@@ -28,9 +28,7 @@ class GifViewModel:NSObject {
     var rating = String()
     
     
-//    init(gif: Gif) {
-//        self.title = gif.title!
-//    }
+
     
     func getGifArrayFromJSON(fromURL url: String) -> [Gif]? {
         let parser = JSON_Parser()
@@ -77,36 +75,8 @@ class GifViewModel:NSObject {
         return self.resultArray
     }
     
-//    func filterFetchedArray(gifArray: [Gif]) {
-//        var resultGifArray = gifArray
-//        for  gif in resultGifArray {
-//            if (gif.rating != "y" ) {
-//                resultGifArray.remove(at: resultGifArray.index{$0 == gif})
-//                
-//            }
-//        }
-//    }
-    
-    func getNumberOfRowsForTrends() -> Int {
-        self.gifArray = self.getGifArrayFromJSON(fromURL: trendingURL)!
-        self.numberOfRows = self.gifArray.count
-     
-        return self.gifArray.count
-    }
-    
-    func fetchDataForTrendingCell(_ indexPath: IndexPath, completion: ((String) -> Void)?) -> Void {
-        self.gifArray = self.getGifArrayFromJSON(fromURL: trendingURL)!
-        //self.numberOfRows = self.gifArray.count
-        
-        let downloader = Downloader()
 
-        downloader.fetchGif(withUrl: self.gifArray[indexPath.row].urls.smallURL) { (data, destinationURL) in
-            let str: String = (destinationURL?.absoluteString)!
-            self.location = str
-            //self.gifArray[indexPath.row].urls.locationURL = destinationURL
-            completion!(str)
-        }
-    }
+    
     func fetchGifsForTrends(url: String, completion: @escaping ((Data, URL) -> Void))  {
         let downloader = Downloader()
         downloader.fetchGif(withUrl: url) { (data, destinationURL) in

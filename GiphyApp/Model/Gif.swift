@@ -37,14 +37,7 @@ class Gif {
         var locationURL: String?
     }
     
-//    init(smallURL: String, largeURL: String, title: String, pubDate: String, trendingDate:String, size: Size) {
-//            self.smallURL = smallURL
-//            self.largeURL = largeURL
-//            self.title = title
-//            self.pubDate = pubDate
-//            self.trendingDate = trendingDate
-//            self.sizes = size
-//        }
+
     init(urls: Urls, title: String?,rating: String?, dates: Dates, size: Size) {
         self.title = title
         self.urls = urls

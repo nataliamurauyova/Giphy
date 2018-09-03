@@ -10,14 +10,7 @@
 #import "GiphyFileManager.h"
 
 @implementation Downloader
--(BOOL)downloadFromLink:(NSString*)urlString : (void(^)(NSData *data))complition{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        NSURL *url = [[NSURL alloc] initWithString:urlString];
-        NSData * data = [[NSData alloc] initWithContentsOfURL:url];
-        complition(data);
-    });
-    return true;
-}
+
 - (void)fetchGifWithUrl:(NSString*)strUrl andComplition:(void(^)(NSData*data, NSURL *locationUrl))complition {
     NSURLSession *defaultSession = [NSURLSession sharedSession];
     
