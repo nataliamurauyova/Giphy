@@ -37,7 +37,7 @@
     NSURLSessionDownloadTask *downloadTask = [defaultSession downloadTaskWithURL:[NSURL URLWithString:strUrl] completionHandler:^(NSURL* _Nullable location, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         
 
-        //GiphyFileManager *fileManager = [[GiphyFileManager alloc] init];
+      
         NSURL *destinationUrl = [GiphyFileManager copyToCache:location];
         NSData *data = [NSData dataWithContentsOfURL:destinationUrl];
         

@@ -9,6 +9,7 @@
 import Foundation
 
 struct Constants {
+    static let kDataTag = "data"
     static let kTitleTag = "title"
     static let kPubDate = "import_datetime"
     static let kTrendDate = "trending_datetime"

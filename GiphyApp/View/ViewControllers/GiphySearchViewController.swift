@@ -91,7 +91,13 @@ class GiphySearchViewController: UIViewController,UICollectionViewDelegate, UICo
         if (indexPath.row == count){
             self.offset += 25
             let url: String = "\(constantUrls.kSearchUrl)\(self.searchQuery)&api_key=\(constantUrls.apiKey)&offset=\(self.offset)rating=\(self.viewModel.rating))"
-            self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: url)!
+            //self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: url)!
+            if let arr = self.viewModel.getGifArrayFromJSON(fromURL: url) {
+                self.dataSource = arr
+                if (arr[indexPath.row].urls.smallURL == nil){
+                    arr[indexPath.row].urls.smallURL = "https://media2.giphy.com/media/1AgUUXI6Lqm5QHciLX/giphy-preview.gif?cid=e1bb72ff5b8d38c663362e30771c9ca6"
+                }
+            }
             var indexes = [IndexPath]()
             for idx in (self.dataSource.count)-25..<(self.dataSource.count) {
                 indexes.append(IndexPath(item: idx, section: 0))

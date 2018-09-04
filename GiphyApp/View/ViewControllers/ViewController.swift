@@ -19,7 +19,7 @@ class ViewController: UIViewController, UICollectionViewDelegate,UICollectionVie
     
     
     let viewModel = GifViewModel()
-    var dataSource = [Gif]()
+    var dataSource = [Gif?]()
     
     var offset = 0
     
@@ -39,7 +39,9 @@ class ViewController: UIViewController, UICollectionViewDelegate,UICollectionVie
        self.searchBar.delegate = self
         
        self.navigationController?.navigationBar.barTintColor = UIColor.gray
-       self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: constantUrls.kTrendingUrl)!
+        guard let arrayWithGifs = self.viewModel.getGifArrayFromJSON(fromURL: constantUrls.kTrendingUrl) else {return}
+        self.dataSource = arrayWithGifs
+       //self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: constantUrls.kTrendingUrl)!
         
 
     }
@@ -75,11 +77,11 @@ class ViewController: UIViewController, UICollectionViewDelegate,UICollectionVie
     //MARK: UICollectionViewDelegateFlowLayout methods
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
         let width = Int((self.view.frame.size.width/2) - 15)
-        var height = self.dataSource[indexPath.row].sizes.height
-        if (height > 200){
+        var height = self.dataSource[indexPath.row]?.sizes.height
+        if (height! > 200){
             height = 170
         }
-        return CGSize(width: width  , height: height)
+        return CGSize(width: width  , height: height!)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -90,7 +92,15 @@ class ViewController: UIViewController, UICollectionViewDelegate,UICollectionVie
         if (indexPath.row == count){
             self.offset += 25
             let url: String = "http://api.giphy.com/v1/gifs/trending?api_key=dc6zaTOxFJmzC&offset=\(self.offset))"
+//            let arrayWithGifs = self.viewModel.getGifArrayFromJSON(fromURL: url)
+//            if (arrayWithGifs![indexPath.row].urls.smallURL != nil){
+//                self.dataSource = arrayWithGifs!
+//            } else {
+//               arrayWithGifs![indexPath.row].urls.smallURL = "https://media2.giphy.com/media/1AgUUXI6Lqm5QHciLX/giphy-preview.gif?cid=e1bb72ff5b8d38c663362e30771c9ca6"
+//            }
+            //self.dataSource = arrayWithGifs
             self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: url)!
+            
             
             var indexes = [IndexPath]()
             for idx in (self.dataSource.count)-25..<(self.dataSource.count) {
@@ -107,32 +117,39 @@ class ViewController: UIViewController, UICollectionViewDelegate,UICollectionVie
             if let sender = sender as? TrendingCollectionViewCell{
                 let indexPath = self.collectionView.indexPath(for: sender)
                 let destVC = segue.destination as! DetailGifViewController
-                destVC.viewModel.title = self.dataSource[(indexPath?.row)!].title!
-                destVC.viewModel.largeUrlGif = self.dataSource[(indexPath?.row)!].urls.largeURL!
-                destVC.viewModel.date = self.dataSource[(indexPath?.row)!].dates.importing!
-                destVC.viewModel.trendingDate = self.dataSource[(indexPath?.row)!].dates.trending!
+                destVC.viewModel.title = (self.dataSource[(indexPath?.row)!]?.title!)!
+                destVC.viewModel.largeUrlGif = (self.dataSource[(indexPath?.row)!]?.urls.largeURL!)!
+                destVC.viewModel.date = (self.dataSource[(indexPath?.row)!]?.dates.importing!)!
+                destVC.viewModel.trendingDate = (self.dataSource[(indexPath?.row)!]?.dates.trending!)!
             }
         }
     }
     func showGif(indexPath: IndexPath, cell: UICollectionViewCell)  {
-        if  let locationUrl = self.dataSource[indexPath.row].urls.locationURL{
+        if  let locationUrl = self.dataSource[indexPath.row]?.urls.locationURL{
             guard let location = URL(string: locationUrl) else{ return }
             let data = try? Data(contentsOf: location)
             
             let image = UIImage.gif(data: data!)
+            
+//            cell.trendImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
+//
+//            cell.trendImageView.image = image
             
             let myImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
             myImageView.image = image
             cell.addSubview(myImageView)
             
         } else{
-            self.viewModel.fetchGifsForTrends(url: self.dataSource[indexPath.row].urls.smallURL!) { (data, destinationURL) in
+            self.viewModel.fetchGifsForTrends(url: (self.dataSource[indexPath.row]?.urls.smallURL!)!) { (data, destinationURL) in
                 DispatchQueue.main.async {[weak self] in
-                    self?.dataSource[indexPath.row].urls.locationURL = destinationURL.absoluteString
+                    self?.dataSource[indexPath.row]?.urls.locationURL = destinationURL.absoluteString
                     let image = UIImage.gif(data: data)
                     let myImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
                     myImageView.image = image
                     cell.addSubview(myImageView)
+                    
+//                    cell.trendImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
+//                    cell.trendImageView.image = image
                 }
             }
         }

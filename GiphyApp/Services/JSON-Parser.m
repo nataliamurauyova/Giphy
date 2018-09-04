@@ -18,6 +18,7 @@ static NSString* const kDataTag = @"data";
 @implementation JSON_Parser
 -(NSArray*)parseJSONFromURL:(NSString*)url{
     
+
     NSData *allContentOfJSON = [[NSData alloc] initWithContentsOfURL: [NSURL URLWithString:url]];
     NSError *error;
     NSMutableDictionary *allGifsInfo = [NSJSONSerialization JSONObjectWithData:allContentOfJSON
@@ -29,7 +30,7 @@ static NSString* const kDataTag = @"data";
         NSArray *dataFromJSONDataTag = allGifsInfo[kDataTag];
         return dataFromJSONDataTag;
     }
-    
+
     return nil;
 }
 @end

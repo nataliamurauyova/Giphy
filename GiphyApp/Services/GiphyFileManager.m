@@ -16,6 +16,9 @@
     NSArray *urls = [defaultManager URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask];
     NSURL *cacheDirectory = [urls objectAtIndex:0];
     NSURL *originalUrl = [NSURL URLWithString:[location lastPathComponent]];
+    if (originalUrl == nil) {
+        return [NSURL URLWithString:@""];
+    }
     NSURL *destinationUrl = [cacheDirectory URLByAppendingPathComponent:[originalUrl lastPathComponent]];
     [defaultManager copyItemAtURL:location toURL:destinationUrl error:nil];
     return destinationUrl;
