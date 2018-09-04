@@ -10,24 +10,6 @@ import UIKit
 
 class TrendingCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet var imageview: UIImageView! = {
-                let imgView = UIImageView.init(frame: .zero)
-                return imgView
-    }()
-    
-//    var trendImageView: UIImageView = {
-//        let imgView = UIImageView.init(frame: .zero)
-//        return imgView
-//    }()
-//    
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//        self.addSubview(self.imageview)
-//    }
-//
-//    required init?(coder aDecoder: NSCoder) {
-//        super.init(coder: aDecoder)
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    @IBOutlet var imageview: UIImageView! 
     
 }

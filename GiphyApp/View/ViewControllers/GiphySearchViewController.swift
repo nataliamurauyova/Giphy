@@ -91,7 +91,7 @@ class GiphySearchViewController: UIViewController,UICollectionViewDelegate, UICo
         if (indexPath.row == count){
             self.offset += 25
             let url: String = "\(constantUrls.kSearchUrl)\(self.searchQuery)&api_key=\(constantUrls.apiKey)&offset=\(self.offset)rating=\(self.viewModel.rating))"
-            //self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: url)!
+            
             if let arr = self.viewModel.getGifArrayFromJSON(fromURL: url) {
                 self.dataSource = arr
                 if (arr[indexPath.row].urls.smallURL == nil){

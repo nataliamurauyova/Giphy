@@ -41,7 +41,7 @@ class ViewController: UIViewController, UICollectionViewDelegate,UICollectionVie
        self.navigationController?.navigationBar.barTintColor = UIColor.gray
         guard let arrayWithGifs = self.viewModel.getGifArrayFromJSON(fromURL: constantUrls.kTrendingUrl) else {return}
         self.dataSource = arrayWithGifs
-       //self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: constantUrls.kTrendingUrl)!
+       
         
 
     }
@@ -53,7 +53,7 @@ class ViewController: UIViewController, UICollectionViewDelegate,UICollectionVie
         vc.navTitle = searchBar.text!
         vc.viewModel.rating = self.viewModel.rating
         print("Rating  - \(self.viewModel.rating)")
-        //self.searchBar.endEditing(true)
+        
     }
     
     //MARK: UICollectionViewDelegate methods
@@ -92,13 +92,7 @@ class ViewController: UIViewController, UICollectionViewDelegate,UICollectionVie
         if (indexPath.row == count){
             self.offset += 25
             let url: String = "http://api.giphy.com/v1/gifs/trending?api_key=dc6zaTOxFJmzC&offset=\(self.offset))"
-//            let arrayWithGifs = self.viewModel.getGifArrayFromJSON(fromURL: url)
-//            if (arrayWithGifs![indexPath.row].urls.smallURL != nil){
-//                self.dataSource = arrayWithGifs!
-//            } else {
-//               arrayWithGifs![indexPath.row].urls.smallURL = "https://media2.giphy.com/media/1AgUUXI6Lqm5QHciLX/giphy-preview.gif?cid=e1bb72ff5b8d38c663362e30771c9ca6"
-//            }
-            //self.dataSource = arrayWithGifs
+
             self.dataSource = self.viewModel.getGifArrayFromJSON(fromURL: url)!
             
             
@@ -124,16 +118,17 @@ class ViewController: UIViewController, UICollectionViewDelegate,UICollectionVie
             }
         }
     }
-    func showGif(indexPath: IndexPath, cell: UICollectionViewCell)  {
+    func showGif(indexPath: IndexPath, cell: TrendingCollectionViewCell)  {
         if  let locationUrl = self.dataSource[indexPath.row]?.urls.locationURL{
             guard let location = URL(string: locationUrl) else{ return }
             let data = try? Data(contentsOf: location)
             
             let image = UIImage.gif(data: data!)
             
-//            cell.trendImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
-//
-//            cell.trendImageView.image = image
+            cell.imageview = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
+            cell.imageview.image = image
+            
+
             
             let myImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
             myImageView.image = image
@@ -147,9 +142,7 @@ class ViewController: UIViewController, UICollectionViewDelegate,UICollectionVie
                     let myImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
                     myImageView.image = image
                     cell.addSubview(myImageView)
-                    
-//                    cell.trendImageView = UIImageView(frame: CGRect(x: 0, y: 0, width: cell.frame.size.width, height: cell.frame.size.height))
-//                    cell.trendImageView.image = image
+
                 }
             }
         }

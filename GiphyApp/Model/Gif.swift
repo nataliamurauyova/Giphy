@@ -11,15 +11,11 @@ import Foundation
 
 class Gif {
    
-    
-//        var smallURL: String?
-//        var largeURL: String?
+
         var title: String?
         var rating: String?
         var urls: Urls
         var dates:Dates
-//        var pubDate: String?
-//        var trendingDate: String?
         var sizes: Size
     
     
